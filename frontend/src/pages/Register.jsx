@@ -16,7 +16,11 @@ const Register = ({ setUser }) => {
     setLoading(true);
     setError('');
     try {
-      const { data } = await axios.post('http://localhost:5000/api/users', { name, email, password });
+      const { data } = await axios.post('https://code-explainer-p3z0.onrender.com/api/users', {
+        name,
+        email,
+        password,
+      });
       setUser(data);
       localStorage.setItem('userInfo', JSON.stringify(data));
       navigate('/');

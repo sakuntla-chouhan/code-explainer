@@ -17,16 +17,15 @@ const Dashboard = ({ user }) => {
     setLoading(true);
     setResponse('');
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const res = await axios.post('http://localhost:5000/api/analyze', {
+      const res = await axios.post('https://code-explainer-p3z0.onrender.com/api/analyze', {
         code,
         mode,
         language
-      }, config);
+      }, {
+        headers: {
+          Authorization: `Bearer ${user.token}`
+        }
+      });
       setResponse(res.data.explanation);
     } catch (error) {
       const errorMessage = error.response?.data?.error || 'Failed to connect to the AI buddy. Please check your connection.';

@@ -15,7 +15,10 @@ const Login = ({ setUser }) => {
     setLoading(true);
     setError('');
     try {
-      const { data } = await axios.post('http://localhost:5000/api/users/login', { email, password });
+      const { data } = await axios.post('https://code-explainer-p3z0.onrender.com/api/users/login', {
+        email,
+        password,
+      });
       setUser(data);
       localStorage.setItem('userInfo', JSON.stringify(data));
       navigate('/');
