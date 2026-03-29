@@ -17,7 +17,7 @@ const Dashboard = ({ user }) => {
     setLoading(true);
     setResponse('');
     try {
-      const res = await axios.post('https://code-explainer-p3z0.onrender.com/api/analyze', {
+      const res = await axios.post('https://code-explainer-1-ol3q.onrender.com/api/analyze', {
         code,
         mode,
         language

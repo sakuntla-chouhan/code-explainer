@@ -22,11 +22,13 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.post('/api/analyze', protect, async (req, res) => {
   const { code, mode, language } = req.body;
   const modelsToTry = [
-    "gemini-2.0-flash", 
-    "gemini-2.0-flash-lite", 
-    "gemini-2.5-flash", 
-    "gemini-1.5-flash", 
-    "gemini-3.1-flash-live-preview"
+    "gemini-1.5-flash",
+    "gemini-1.5-flash-8b",
+    "gemini-1.0-pro",
+    "gemini-1.5-pro",
+    "gemini-2.0-flash-exp",
+    "gemini-2.0-flash-lite-preview-02-05",
+    "gemini-2.0-pro-exp-02-05"
   ];
   let lastError = null;
   let isRateLimited = false;
