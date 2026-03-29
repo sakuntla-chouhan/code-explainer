@@ -5,15 +5,33 @@ const path = require('path');
 const asyncHandler = require('express-async-handler');
 
 const usersFilePath = path.join(__dirname, '../data/users.json');
+const usersDir = path.join(__dirname, '../data');
+
+// Helper to ensure data directory exists
+const ensureDataDir = () => {
+    if (!fs.existsSync(usersDir)) {
+        fs.mkdirSync(usersDir, { recursive: true });
+    }
+};
 
 // Helper to read users from file
 const getUsers = () => {
-    const data = fs.readFileSync(usersFilePath, 'utf-8');
-    return JSON.parse(data || '[]');
+    ensureDataDir();
+    if (!fs.existsSync(usersFilePath)) {
+        return [];
+    }
+    try {
+        const data = fs.readFileSync(usersFilePath, 'utf-8');
+        return JSON.parse(data || '[]');
+    } catch (error) {
+        console.error('Error reading users file:', error);
+        return [];
+    }
 };
 
 // Helper to save users to file
 const saveUsers = (users) => {
+    ensureDataDir();
     fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
 };
 
