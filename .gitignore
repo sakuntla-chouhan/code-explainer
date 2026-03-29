@@ -5,4 +5,5 @@ dist/
 build/
 .vscode/
 *.log
-backend/data/users.json
+!backend/data/users.json
+!backend/data/.gitkeep
