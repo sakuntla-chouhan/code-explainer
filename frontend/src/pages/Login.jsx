@@ -15,7 +15,7 @@ const Login = ({ setUser }) => {
     setLoading(true);
     setError('');
     try {
-      const { data } = await axios.post('https://code-explainer-1-ol3q.onrender.com/api/users/login', {
+      const { data } = await axios.post('https://code-explainer-2-0u14.onrender.com/api/users/login', {
         email,
         password,
       });
