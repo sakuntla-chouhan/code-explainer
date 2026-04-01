@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Send, Loader2, Sparkles, Languages } from 'lucide-react';
@@ -17,7 +18,7 @@ const Dashboard = ({ user }) => {
     setLoading(true);
     setResponse('');
     try {
-      const res = await axios.post('https://code-explainer-2-0u14.onrender.com/api/analyze', {
+      const res = await axios.post(`${API_BASE_URL}/analyze`, {
         code,
         mode,
         language

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Loader2 } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState('');
@@ -15,7 +16,7 @@ const Login = ({ setUser }) => {
     setLoading(true);
     setError('');
     try {
-      const { data } = await axios.post('https://code-explainer-2-0u14.onrender.com/api/users/login', {
+      const { data } = await axios.post(`${API_BASE_URL}/users/login`, {
         email,
         password,
       });
