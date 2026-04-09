@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Code2, LogOut, User as UserIcon } from 'lucide-react';
+import { Code2, LogOut, User as UserIcon, Sun, Moon } from 'lucide-react';
 
-const Navbar = ({ user, logout }) => {
+const Navbar = ({ user, logout, theme, toggleTheme }) => {
   const navigate = useNavigate();
 
   return (
@@ -13,6 +13,15 @@ const Navbar = ({ user, logout }) => {
       </Link>
       
       <div className="nav-links">
+        <button 
+          onClick={toggleTheme} 
+          className="btn-secondary" 
+          style={{ padding: '0.4rem', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+        >
+          {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+        </button>
+
         {user ? (
           <>
             <span className="nav-link" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

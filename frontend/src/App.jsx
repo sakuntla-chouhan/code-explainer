@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
 
   useEffect(() => {
     const userInfo = localStorage.getItem('userInfo');
@@ -15,6 +16,19 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark-mode');
+    } else {
+      document.documentElement.classList.remove('dark-mode');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
+
   const logout = () => {
     localStorage.removeItem('userInfo');
     setUser(null);
@@ -22,7 +36,7 @@ function App() {
 
   return (
     <div className="app-container">
-      <Navbar user={user} logout={logout} />
+      <Navbar user={user} logout={logout} theme={theme} toggleTheme={toggleTheme} />
       <main>
         <Routes>
           <Route 

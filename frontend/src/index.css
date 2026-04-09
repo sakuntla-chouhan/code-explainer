@@ -10,6 +10,18 @@
   --radius-sm: 0.375rem;
   --radius: 0.5rem;
   --radius-lg: 0.75rem;
+  --card-bg: white;
+  --transition: all 0.3s ease;
+}
+
+:root.dark-mode {
+  --bg: #000000;
+  --fg: #ffffff;
+  --fg-muted: #999999;
+  --border: #333333;
+  --secondary-bg: #111111;
+  --accent: #ffffff;
+  --card-bg: #0a0a0a;
 }
 
 * {
@@ -24,6 +36,7 @@ body {
   color: var(--fg);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  transition: var(--transition);
 }
 
 .app-container {
@@ -39,10 +52,11 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: white;
+  background: var(--bg);
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: var(--transition);
 }
 
 .nav-logo {
@@ -155,6 +169,8 @@ main {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  background: var(--card-bg);
+  transition: var(--transition);
 }
 
 .auth-title {
@@ -214,7 +230,8 @@ main {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: white;
+  background: var(--card-bg);
+  transition: var(--transition);
 }
 
 .panel-header {
@@ -250,6 +267,8 @@ textarea {
   line-height: 1.6;
   resize: none;
   outline: none;
+  background: transparent;
+  color: var(--fg);
 }
 
 .response-panel {
@@ -316,7 +335,8 @@ textarea {
 }
 
 .pill-btn.active {
-  background: white;
+  background: var(--bg);
+  color: var(--fg);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 

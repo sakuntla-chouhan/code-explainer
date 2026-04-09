@@ -4,6 +4,8 @@ const cors = require('cors');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const { protect } = require('./middleware/authMiddleware');
 
+const { errorHandler } = require('./middleware/errorMiddleware');
+
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -22,20 +24,20 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.post('/api/analyze', protect, async (req, res) => {
   const { code, mode, language } = req.body;
   const modelsToTry = [
-    "gemini-1.5-flash",
-    "gemini-1.5-flash-8b",
-    "gemini-1.0-pro",
-    "gemini-1.5-pro",
-    "gemini-2.0-flash-exp",
-    "gemini-2.0-flash-lite-preview-02-05",
-    "gemini-2.0-pro-exp-02-05"
+    "gemini-flash-latest",
+    "gemini-flash-lite-latest",
+    "gemini-2.0-flash",
+    "gemini-2.0-flash-lite",
+    "gemini-pro-latest"
   ];
   let lastError = null;
   let isRateLimited = false;
 
+  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
   for (const modelName of modelsToTry) {
     try {
-      console.log(`Attempting analysis with model: ${modelName}`);
+      console.log(`[${new Date().toISOString()}] Attempting analysis with model: ${modelName}`);
       const model = genAI.getGenerativeModel({ model: modelName });
 
       let systemPrompt = `You are an expert AI Programming Coach. A student has provided some code. 
@@ -57,29 +59,36 @@ app.post('/api/analyze', protect, async (req, res) => {
       const response = await result.response;
       const text = response.text();
 
+      console.log(`[${new Date().toISOString()}] Successfully generated content with model: ${modelName}`);
       return res.json({ explanation: text, modelUsed: modelName });
     } catch (error) {
-      console.error(`Error with model ${modelName}:`, error.message);
+      console.error(`[${new Date().toISOString()}] Error with model ${modelName}:`, error.message);
       lastError = error;
-      
+
       // Check for rate limit error (429)
       if (error.message && (error.message.includes('429') || error.message.toLowerCase().includes('quota'))) {
         isRateLimited = true;
+        console.log(`[${new Date().toISOString()}] Rate limit hit for ${modelName}. Waiting 2s before next model...`);
+        await sleep(2000); // Wait 2 seconds before trying the next model
       }
-      
-      // Continue to next model
+
+      // If it's a 404, we just continue. If it's something else, we log it more aggressively.
     }
   }
 
-  const errorMessage = isRateLimited 
-    ? 'The AI buddy is currently busy (Rate Limit). Please try again in a few seconds.' 
+  console.error(`[${new Date().toISOString()}] All models failed. Last error:`, lastError?.message);
+
+  const errorMessage = isRateLimited
+    ? 'The AI buddy is currently reaching its limit. Please wait a few seconds and try again.'
     : 'All AI models failed to process the request. Please check your API key and connection.';
 
-  res.status(500).json({ 
+  res.status(500).json({
     error: errorMessage,
     details: lastError ? lastError.message : 'Unknown error'
   });
 });
+
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
